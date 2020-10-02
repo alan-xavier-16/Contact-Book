@@ -11,7 +11,7 @@ MENU_PROMPT = """--- MENU ---
 2. Show all users.
 3. Show a user.
 4. Add new contact.
-5. Show all contact.
+5. Show all contacts.
 6. Show a contact.
 7. Exit.
 
@@ -57,13 +57,23 @@ def prompt_add_new_contact():
     new_contact.save()
 
 
+def show_all_contacts():
+    """Show all contacts"""
+    user_id = int(input("Please enter your user id: "))
+    contacts = User.get(user_id).contacts
+    for contact in contacts:
+        print(contact.__str__())
+    print("\n")
+
+
 # -- USER INTERFACE --
 MENU_OPTIONS = {
     "1": prompt_create_user,
     "2": show_all_users,
     "3": show_user,
     "4": prompt_add_new_contact,
-    "5": None
+    "5": show_all_contacts,
+    "6": None
 }
 
 

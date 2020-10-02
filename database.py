@@ -64,6 +64,14 @@ def create_user(connection, name: str, email: str, password: str):
 
 
 # -- CONTACTS --
+def get_contacts(connection, user_id: int) -> List[Contact]:
+    """Get ALL contact for a specified user"""
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(SELECT_USER_CONTACTS, (user_id,))
+        return cursor.fetchall()
+
+
 def add_contact(connection, contact_name: str, contact_phone_no: str, contact_email: str, user_id: int):
     """Create a new contact for specified user"""
     with connection:

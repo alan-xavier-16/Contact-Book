@@ -15,6 +15,9 @@ class Contact:
     def __repr__(self) -> str:
         return f"Contact({self.name!r}, {self.phone_no!r}, {self.email!r}, {self.user_id!r}, {self.id!r})"
 
+    def __str__(self) -> str:
+        return f"ID: {self.id}, Name: {self.name}, Phone: {self.phone_no}, Email: {self.email}"
+
     def save(self):
         """Save contact to database"""
         with create_connection() as connection:

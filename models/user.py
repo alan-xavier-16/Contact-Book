@@ -1,7 +1,7 @@
 from typing import List
 from connection import create_connection
 from models.contact import Contact
-from database import create_user, get_users, get_user
+from database import create_user, get_users, get_user, get_contacts
 
 
 class User:
@@ -29,6 +29,13 @@ class User:
     def add_contact(self, contact_name: str, contact_phone_no: int, contact_email: str):
         """Add new contact to database"""
         Contact(contact_name, contact_phone_no, contact_email, self.id)
+
+    @property
+    def contacts(self) -> List[Contact]:
+        """Return ALL contacts for user"""
+        with create_connection() as connection:
+            contacts = get_contacts(connection, self.id)
+            return [Contact(contact[1], contact[2], contact[3], contact[4], contact[0]) for contact in contacts]
 
     @classmethod
     def all(cls) -> List["User"]:
