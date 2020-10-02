@@ -28,6 +28,21 @@ SELECT_CONTACT = "SELECT * FROM contacts WHERE id = ?;"
 INSERT_USER = "INSERT INTO users (name, email, password) VALUES (?, ?, ?);"
 INSERT_CONTACT = "INSERT INTO contacts (name, phone_no, email, user_id) VALUES (?, ?, ?, ?);"
 
+UPDATE_USER = """UPDATE users 
+SET name = ?, 
+    email = ?,
+    password = ?
+WHERE id = ?;"""
+UPDATE_CONTACT = """UPDATE contacts 
+SET name = ?,
+    phone_no = ?,
+    email = ?
+WHERE id = ? AND user_id = ?;"""
+
+DELETE_USER = "DELETE FROM users WHERE id = ?;"
+DELETE_USER_CONTACTS = "DELETE FROM contacts where user_id = ?;"
+DELETE_CONTACT = "DELETE FROM contacts where id = ?;"
+
 
 # -- DATABASE CONNECTION --
 def create_tables(connection):
@@ -64,6 +79,14 @@ def create_user(connection, name: str, email: str, password: str):
         return user_id
 
 
+def update_user(connection, name: str, email: str, password: str, user_id: int):
+    """Update specified user in database"""
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(UPDATE_USER, (name, email, password, user_id))
+        return cursor.fetchone()
+
+
 # -- CONTACTS --
 def get_contacts(connection, user_id: int) -> List[Contact]:
     """Get ALL contact for a specified user"""
@@ -89,3 +112,12 @@ def add_contact(connection, contact_name: str, contact_phone_no: str, contact_em
                                         contact_phone_no, contact_email, user_id))
         contact_id = cursor.lastrowid
         return contact_id
+
+
+def update_contact(connection, contact_name: str, contact_phone_no: str, contact_email: str, contact_id: int, user_id: int):
+    """Update specified contact in database"""
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(UPDATE_CONTACT, (contact_name,
+                                        contact_phone_no, contact_email, contact_id, user_id))
+        return cursor.fetchone()

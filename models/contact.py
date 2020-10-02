@@ -1,5 +1,5 @@
 from connection import create_connection
-from database import add_contact, get_contact
+from database import add_contact, get_contact, update_contact
 
 
 class Contact:
@@ -31,3 +31,9 @@ class Contact:
         with create_connection() as connection:
             contact = get_contact(connection, id)
             return cls(contact[1], contact[2], contact[3], contact[4], contact[0])
+
+    def update(self):
+        """Update contact details to database"""
+        with create_connection() as connection:
+            update_contact(connection, self.name,
+                           self.phone_no, self.email, self.id, self.user_id)

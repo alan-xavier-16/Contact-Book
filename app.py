@@ -13,7 +13,11 @@ MENU_PROMPT = """--- MENU ---
 4. Add new contact.
 5. Show all contacts.
 6. Show a contact.
-7. Exit.
+7. Update user.
+8. Update contact.
+9. Delete user.
+10. Delete contact.
+11. Exit.
 
 Enter your choice: """
 
@@ -74,6 +78,50 @@ def show_contact():
     print("\n")
 
 
+def update_user():
+    """Update a user"""
+    user_id = int(input("Please enter your user id: "))
+    user = User.get(user_id)
+    print(f"Current details: {user.__str__()}")
+
+    if name := input("Please enter name: "):
+        user.name = name
+    if email := input("Please enter email: "):
+        user.email = email
+    if password := input("Please enter password: "):
+        user.password = password
+
+    user.update()
+    print(f"New details: {user.__str__()}")
+
+
+def update_contact():
+    """Update a contact"""
+    contact_id = int(input("Please enter contact id: "))
+    contact = Contact.get(contact_id)
+    print(f"Current details: {contact.__str__()}")
+
+    if contact_name := input("Please enter contact name: "):
+        contact.name = contact_name
+    if contact_phone_num := input("Please enter contact phone no: "):
+        contact.phone_no = contact_phone_num
+    if contact_email := input("Please enter contact email: "):
+        contact.email = contact_email
+
+    contact.update()
+    print(f"New details: {contact.__str__()}")
+
+
+def delete_user():
+    """Remove a user"""
+    pass
+
+
+def delete_contact():
+    """Remove a contact"""
+    pass
+
+
 # -- USER INTERFACE --
 MENU_OPTIONS = {
     "1": prompt_create_user,
@@ -82,7 +130,10 @@ MENU_OPTIONS = {
     "4": prompt_add_new_contact,
     "5": show_all_contacts,
     "6": show_contact,
-    "7": None
+    "7": update_user,
+    "8": update_contact,
+    "9": delete_user,
+    "10": delete_contact
 }
 
 
@@ -91,7 +142,7 @@ def menu():
     with create_connection() as connection:
         create_tables(connection)
 
-    while (selection := input(MENU_PROMPT)) != "8":
+    while (selection := input(MENU_PROMPT)) != "11":
         try:
             MENU_OPTIONS[selection]()
         except KeyError:

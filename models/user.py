@@ -1,7 +1,7 @@
 from typing import List
 from connection import create_connection
 from models.contact import Contact
-from database import create_user, get_users, get_user, get_contacts
+from database import create_user, get_users, get_user, get_contacts, update_user
 
 
 class User:
@@ -50,3 +50,9 @@ class User:
         with create_connection() as connection:
             user = get_user(connection, id)
             return cls(user[1], user[2], user[3], user[0])
+
+    def update(self):
+        """Update specific user"""
+        with create_connection() as connection:
+            update_user(connection, self.name, self.email,
+                        self.password, self.id)
