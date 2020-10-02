@@ -66,6 +66,14 @@ def show_all_contacts():
     print("\n")
 
 
+def show_contact():
+    """Show a contact"""
+    contact_id = int(input("Please enter contact id: "))
+    contact = Contact.get(contact_id)
+    print(contact.__str__())
+    print("\n")
+
+
 # -- USER INTERFACE --
 MENU_OPTIONS = {
     "1": prompt_create_user,
@@ -73,7 +81,8 @@ MENU_OPTIONS = {
     "3": show_user,
     "4": prompt_add_new_contact,
     "5": show_all_contacts,
-    "6": None
+    "6": show_contact,
+    "7": None
 }
 
 
@@ -82,7 +91,7 @@ def menu():
     with create_connection() as connection:
         create_tables(connection)
 
-    while (selection := input(MENU_PROMPT)) != "7":
+    while (selection := input(MENU_PROMPT)) != "8":
         try:
             MENU_OPTIONS[selection]()
         except KeyError:

@@ -23,6 +23,7 @@ CREATE_CONTACTS = """CREATE TABLE IF NOT EXISTS contacts (
 SELECT_ALL_USERS = "SELECT * FROM users;"
 SELECT_USER = "SELECT * FROM users WHERE id = ?;"
 SELECT_USER_CONTACTS = "SELECT * FROM contacts WHERE user_id = ?;"
+SELECT_CONTACT = "SELECT * FROM contacts WHERE id = ?;"
 
 INSERT_USER = "INSERT INTO users (name, email, password) VALUES (?, ?, ?);"
 INSERT_CONTACT = "INSERT INTO contacts (name, phone_no, email, user_id) VALUES (?, ?, ?, ?);"
@@ -70,6 +71,14 @@ def get_contacts(connection, user_id: int) -> List[Contact]:
         cursor = connection.cursor()
         cursor.execute(SELECT_USER_CONTACTS, (user_id,))
         return cursor.fetchall()
+
+
+def get_contact(connection, contact_id) -> Contact:
+    """Get contact for user"""
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(SELECT_CONTACT, (contact_id,))
+        return cursor.fetchone()
 
 
 def add_contact(connection, contact_name: str, contact_phone_no: str, contact_email: str, user_id: int):

@@ -1,5 +1,5 @@
 from connection import create_connection
-from database import add_contact
+from database import add_contact, get_contact
 
 
 class Contact:
@@ -24,3 +24,10 @@ class Contact:
             new_contact_id = add_contact(
                 connection, self.name, self.phone_no, self.email, self.user_id)
             self.id = new_contact_id
+
+    @classmethod
+    def get(cls, id: int) -> "Contact":
+        """Show a contact in database"""
+        with create_connection() as connection:
+            contact = get_contact(connection, id)
+            return cls(contact[1], contact[2], contact[3], contact[4], contact[0])
