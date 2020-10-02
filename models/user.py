@@ -1,6 +1,7 @@
+from typing import List
 from connection import create_connection
 from models.contact import Contact
-from database import create_user
+from database import create_user, get_users, get_user
 
 
 class User:
@@ -15,6 +16,9 @@ class User:
     def __repr__(self) -> str:
         return f"User({self.name!r}, {self.email!r}, {self.password!r}, {self.id!r})"
 
+    def __str__(self) -> str:
+        return f"ID: {self.id}, Name: {self.name}, Email: {self.email}"
+
     def save(self):
         """Save user to database"""
         with create_connection() as connection:
@@ -25,3 +29,17 @@ class User:
     def add_contact(self, contact_name: str, contact_phone_no: int, contact_email: str):
         """Add new contact to database"""
         Contact(contact_name, contact_phone_no, contact_email, self.id)
+
+    @classmethod
+    def all(cls) -> List["User"]:
+        """Return ALL users"""
+        with create_connection() as connection:
+            users = get_users(connection)
+            return [cls(user[1], user[2], user[3], user[0]) for user in users]
+
+    @classmethod
+    def get(cls, id: int) -> "User":
+        """Return specific user"""
+        with create_connection() as connection:
+            user = get_user(connection, id)
+            return cls(user[1], user[2], user[3], user[0])

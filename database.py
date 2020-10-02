@@ -1,3 +1,8 @@
+from typing import List, Tuple
+
+# -- DATABASE TYPES
+User = Tuple[int, str, str, str]
+Contact = Tuple[int, str, str, str, int]
 
 # -- DATABASE QUERIES --
 CREATE_USERS = """CREATE TABLE IF NOT EXISTS users (
@@ -16,7 +21,7 @@ CREATE_CONTACTS = """CREATE TABLE IF NOT EXISTS contacts (
 );"""
 
 SELECT_ALL_USERS = "SELECT * FROM users;"
-SELECT_USER = "SELECT * FROM users WHERE user.id = ?;"
+SELECT_USER = "SELECT * FROM users WHERE id = ?;"
 SELECT_USER_CONTACTS = "SELECT * FROM contacts WHERE user_id = ?;"
 
 INSERT_USER = "INSERT INTO users (name, email, password) VALUES (?, ?, ?);"
@@ -33,6 +38,22 @@ def create_tables(connection):
 
 
 # -- USERS --
+def get_users(connection) -> List[User]:
+    """Returns users from database"""
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(SELECT_ALL_USERS)
+        return cursor.fetchall()
+
+
+def get_user(connection, id: int) -> User:
+    """Return a User from database"""
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(SELECT_USER, (id,))
+        return cursor.fetchone()
+
+
 def create_user(connection, name: str, email: str, password: str):
     """Create new user & return id from database"""
     with connection:

@@ -1,4 +1,3 @@
-from sqlite3.dbapi2 import connect
 from connection import create_connection
 from database import create_tables
 
@@ -10,9 +9,11 @@ MENU_PROMPT = """--- MENU ---
 
 1. Create user account.
 2. Show all users.
-3. Add new contact.
-4. Show all contact.
-5. Exit.
+3. Show a user.
+4. Add new contact.
+5. Show all contact.
+6. Show a contact.
+7. Exit.
 
 Enter your choice: """
 
@@ -31,7 +32,18 @@ def prompt_create_user():
 
 def show_all_users():
     """Show all users"""
-    pass
+    users = User.all()
+    for user in users:
+        print(user.__str__())
+    print("\n")
+
+
+def show_user():
+    """Show a user"""
+    user_id = int(input("Enter user id: "))
+    user = User.get(user_id)
+    print(user.__str__())
+    print("\n")
 
 
 def prompt_add_new_contact():
@@ -49,8 +61,9 @@ def prompt_add_new_contact():
 MENU_OPTIONS = {
     "1": prompt_create_user,
     "2": show_all_users,
-    "3": prompt_add_new_contact,
-    "4": None
+    "3": show_user,
+    "4": prompt_add_new_contact,
+    "5": None
 }
 
 
@@ -59,7 +72,7 @@ def menu():
     with create_connection() as connection:
         create_tables(connection)
 
-    while (selection := input(MENU_PROMPT)) != "5":
+    while (selection := input(MENU_PROMPT)) != "7":
         try:
             MENU_OPTIONS[selection]()
         except KeyError:
