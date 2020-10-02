@@ -114,12 +114,16 @@ def update_contact():
 
 def delete_user():
     """Remove a user"""
-    pass
+    user_id = int(input("Please enter your user id: "))
+    User.remove(user_id)
+    print(f"User removed")
 
 
 def delete_contact():
     """Remove a contact"""
-    pass
+    contact_id = int(input("Please enter contact id: "))
+    Contact.remove(contact_id)
+    print(f"Contact removed")
 
 
 # -- USER INTERFACE --

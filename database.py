@@ -87,6 +87,14 @@ def update_user(connection, name: str, email: str, password: str, user_id: int):
         return cursor.fetchone()
 
 
+def delete_user(connection, user_id: int):
+    """Delete specified user from database"""
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(DELETE_USER, (user_id,))
+        cursor.execute(DELETE_USER_CONTACTS, (user_id,))
+
+
 # -- CONTACTS --
 def get_contacts(connection, user_id: int) -> List[Contact]:
     """Get ALL contact for a specified user"""
@@ -121,3 +129,10 @@ def update_contact(connection, contact_name: str, contact_phone_no: str, contact
         cursor.execute(UPDATE_CONTACT, (contact_name,
                                         contact_phone_no, contact_email, contact_id, user_id))
         return cursor.fetchone()
+
+
+def delete_contact(connection, contact_id: int):
+    """Delete specified contact from database"""
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(DELETE_CONTACT, (contact_id,))

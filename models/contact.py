@@ -1,5 +1,5 @@
 from connection import create_connection
-from database import add_contact, get_contact, update_contact
+from database import add_contact, get_contact, update_contact, delete_contact
 
 
 class Contact:
@@ -37,3 +37,9 @@ class Contact:
         with create_connection() as connection:
             update_contact(connection, self.name,
                            self.phone_no, self.email, self.id, self.user_id)
+
+    @staticmethod
+    def remove(id: int):
+        """Delete specific contact"""
+        with create_connection() as connection:
+            delete_contact(connection, id)

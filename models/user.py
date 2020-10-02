@@ -1,7 +1,7 @@
 from typing import List
 from connection import create_connection
 from models.contact import Contact
-from database import create_user, get_users, get_user, get_contacts, update_user
+from database import create_user, get_users, get_user, get_contacts, update_user, delete_user
 
 
 class User:
@@ -56,3 +56,9 @@ class User:
         with create_connection() as connection:
             update_user(connection, self.name, self.email,
                         self.password, self.id)
+
+    @staticmethod
+    def remove(id: int):
+        """Delete specific user"""
+        with create_connection() as connection:
+            delete_user(connection, id)
